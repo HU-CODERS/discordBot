@@ -37,16 +37,27 @@ export async function startBot() {
   client.once(Events.ClientReady, async (readyClient) => {
     console.log(`¡Listo! Conectado como ${readyClient.user.tag}`);
     
-    // Enviar mensaje al canal de moderadores
+    // Obtener la fecha y hora actual
+    const fechaHora = new Date().toLocaleString('es-ES', { timeZone: 'America/Argentina/Buenos_Aires' });
+
+    // Enviar mensaje al canal de moderadores con la fecha y hora exacta
     try {
-      const modChannel = await client.channels.fetch(process.env.MOD_CHANNEL_ID);
+      // Verificar si el bot está en algún servidor
+      if (client.guilds.cache.size === 0) {
+        console.log("No se generó el mensaje diario porque el bot no pertenece a ningún servidor o no tiene permisos para acceder.");
+        return;
+      }
+
+      const modChannel = await client.channels.fetch(process.env.MOD_CHANNEL_ID).catch(() => null);
       if (modChannel) {
         await modChannel.send({
-          content: '🤖 Bot iniciado exitosamente.\n\nDesarrollado por Jorge Gallardo (justjorge)\nPara Clan Ronin - Hell Let Loose Latinoamérica\n\nVersión: 2.0.0'
+          content: `🟢 Bot iniciado correctamente. ${fechaHora} ⌚.\n\n⭐ Versión 1.22`
         });
+      } else {
+        console.log("No se generó el mensaje diario porque el bot no pertenece a ningún servidor o no tiene permisos para acceder.");
       }
     } catch (error) {
-      console.error('Error al enviar mensaje de inicio:', error);
+      console.log("No se generó el mensaje diario porque el bot no pertenece a ningún servidor o no tiene permisos para acceder.");
     }
 
     try {
@@ -76,10 +87,10 @@ export async function startBot() {
         });
 
       await modChannel.send({
-        content: '👋 ¡Hola! Soy el bot oficial del Clan Ronin.\n\nEste canal será utilizado para gestionar las postulaciones y otras funciones administrativas.\n\nDesarrollado por HUCO (SGT. Mokka -REC-)\nPara Clan Ronin - Hell Let Loose Latinoamérica'
+        content: '👋 ¡Hola! Soy el bot oficial del Clan Ronin.\n\nEste canal será utilizado para gestionar las postulaciones y otras funciones administrativas.\n\nDesarrollado por SGT. Mokka -🆁ec-\nPara Clan Ronin - Hell Let Loose Latinoamérica'
       });
     } catch (error) {
-      console.error('Error al configurar canal de moderadores:', error);
+      console.log("No se pudo crear o acceder al canal de moderadores.");
     }
   });
 

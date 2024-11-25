@@ -4,9 +4,11 @@ import {
     ButtonStyle, 
     EmbedBuilder 
   } from 'discord.js';
-  import Fuse from 'fuse.js';
+  // const Fuse = require('fuse.js');
+
   import { teamMembers } from '../data/team.js';
   
+
   export async function handleProfileCommand(interaction) {
     const row = new ActionRowBuilder()
       .addComponents(
@@ -31,13 +33,13 @@ import {
     const action = interaction.customId.split('_')[1];
   
     if (action === 'verify') {
-      const fuse = new Fuse(teamMembers.Members, {
-        keys: ['name'],
-        threshold: 0.4
-      });
+      // const fuse = new Fuse(teamMembers.Members, {
+      //   keys: ['name'],
+      //   threshold: 0.4
+      // });
   
       const username = interaction.user.username;
-      const results = fuse.search(username);
+      // const results = fuse.search(username);
   
       if (results.length > 0) {
         const profile = results[0].item;

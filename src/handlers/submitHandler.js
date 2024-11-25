@@ -29,20 +29,24 @@ export async function handleApplicationSubmit(interaction) {
       new ButtonBuilder()
         .setCustomId(`approve_${interaction.user.id}`)
         .setLabel('Aprobar')
-        .setStyle(ButtonStyle.Success),
+        .setStyle(ButtonStyle.Success)
+        .setEmoji('✅'),
       new ButtonBuilder()
         .setCustomId(`deny_${interaction.user.id}`)
         .setLabel('Denegar')
         .setStyle(ButtonStyle.Danger)
+        .setEmoji('❌')
     );
 
   // Enviar a canal de moderadores
-  const channel = await interaction.client.channels.fetch(process.env.APPLICATIONS_CHANNEL_ID);
-  await channel.send({ embeds: [modEmbed], components: [buttons] });
+  const modChannel = await interaction.client.channels.fetch(process.env.MOD_CHANNEL_ID);
+  if (modChannel) {
+    await modChannel.send({ embeds: [modEmbed], components: [buttons] });
+  }
 
   // Confirmar al usuario
   await interaction.reply({
-    content: '✅ Tu postulación ha sido enviada correctamente. Te notificaremos el resultado en el canal de postulaciones.',
+    content: '✅ Tu postulación ha sido enviada correctamente. Te notificaremos el resultado.',
     ephemeral: true
   });
 }

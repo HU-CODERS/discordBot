@@ -4,14 +4,6 @@ const commands = [
   new SlashCommandBuilder()
     .setName('setup')
     .setDescription('Crea el formulario de postulación en este canal')
-    .toJSON(),
-  new SlashCommandBuilder()
-    .setName('profile')
-    .setDescription('Gestiona tu perfil de equipo')
-    .toJSON(),
-  new SlashCommandBuilder()
-    .setName('myprofile')
-    .setDescription('Ver tu perfil actual')
     .toJSON()
 ];
 
