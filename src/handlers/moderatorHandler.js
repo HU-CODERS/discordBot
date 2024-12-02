@@ -18,14 +18,25 @@ export async function handleModeratorDecision(interaction) {
     }
 
     if (isApproved) {
-      // Asignar rol de Recluta
+      // Asignar rol de Recluta y cambiar nickname
       const recruitRoleId = process.env.RECRUIT_ROLE_ID;
       try {
         await member.roles.add(recruitRoleId);
+        
+        // Primero restauramos el nombre original del usuario
+        const originalName = user.username;
+        
+        // Verificar si el nuevo nickname no excede el límite de 32 caracteres
+        const suffix = ' -🆁ec-';
+        const maxBaseLength = 32 - suffix.length;
+        const baseName = originalName.slice(0, maxBaseLength);
+        const newNickname = baseName + suffix;
+        
+        await member.setNickname(newNickname);
       } catch (error) {
-        console.error('Error al asignar rol:', error);
+        console.error('Error al asignar rol o cambiar nickname:', error);
         await interaction.reply({
-          content: '❌ Error al asignar el rol de recluta.',
+          content: '❌ Error al asignar el rol de recluta o cambiar el nickname.',
           ephemeral: true
         });
         return;
@@ -35,11 +46,12 @@ export async function handleModeratorDecision(interaction) {
       const welcomeChannel = await interaction.client.channels.fetch(process.env.WELCOME_CHANNEL_ID);
       if (welcomeChannel) {
         await welcomeChannel.send({
-          content: `${user}\n\nBienvenido recluta!! Nos alegra que hayas podido alistarte en Ronin. Ahora comenzarás a ser observado y portarás en tu nombre de steam la insignia -🆁ec-\n\nUnase al Discord para poder conocerlo y acompañarlo en este largo camino de Hell Let Loose. Esto es un clan competitivo y se le va a exigir 101% soldado.\n\nEl Discord puede parecer un poco confuso al principio, por lo que comience por mutear la mayoría de canales a excepción de ⁠#eventos y el #bar-recluta Este canal será donde podrás comunicarte e interactuar con el resto de la comunidad. Si quieres participar de los eventos contra otros clanes deberás confirmar con el ✅ estará dentro del sistema y como potencial jugador en la alineación.\n\nSaludos y nos vemos en el campo de batalla. Suba sus stats a: ⁠#stats lo antes posible.`
+          content: `${user}\n\nBienvenido recluta!! Nos alegra que hayas podido alistarte en Ronin. Ahora comenzarás a ser observado y portarás en tu nombre de steam la insignia -🆁ec-\n\nUnase al Discord para poder conocerlo y acompañarlo en este largo camino de Hell Let Loose. Esto es un clan competitivo y se le va a exigir 101% soldado.\n\nEl Discord puede parecer un poco confuso al principio, por lo que comience por mutear la mayoría de canales a excepción de <#1128395730650931290> y el <#1108376523712503918> Este canal será donde podrás comunicarte e interactuar con el resto de la comunidad. Si quieres participar de los eventos contra otros clanes deberás confirmar con el ✅ estará dentro del sistema y como potencial jugador en la alineación.\n\nSaludos y nos vemos en el campo de batalla. Suba sus stats a: <#1057160142224904273> lo antes posible.`
         });
       }
     } else {
       const rejectionMessage = `Hola soldado! Nos alegra verte con ganas de formar parte del clan. Pero para formar parte de nuestras filas necesitaras demostrar tu valor en el campo de batalla. Unete al servidor "Hagamos Garris Latinoamérica" y dá lo mejor de ti, los Ronins te estaremos observando y evaluando. Báncate las caídas, arma los garrys, los nodos y encuentra tu clase favorita y mata muchos enemigos!! Y solo cuando llegues a lvl 80 volverás a postularte y ahí si podremos darte una respuesta.\n\nSeguinos en las redes sociales y andá llenandote de hype, porque cuando vuelvas a postularte tendremos tu insignia esperándote.\n🫡  A JUGAR!`;
+
       // Intento de envío de mensaje privado
       try {
         await user.send(rejectionMessage);
@@ -50,7 +62,7 @@ export async function handleModeratorDecision(interaction) {
           try {
             await applicationsChannel.send({
               content: `${user}\n\n${rejectionMessage}`,
-              ephemeral: true
+              flags: MessageFlags.Ephemeral
             });
           } catch (channelError) {
             console.error('Error al enviar mensaje de rechazo:', channelError);
