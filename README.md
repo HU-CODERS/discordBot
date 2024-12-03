@@ -28,7 +28,7 @@ Bot oficial del Clan Ronin para Hell Let Loose Latinoamérica.
    ```
 4. Clona el repositorio:
    ```bash
-   git clone [URL_DEL_REPOSITORIO]
+   git clone [[URL_DEL_REPOSITORIO]](https://github.com/HU-CODERS/discordBot/edit/master/README.md)
    ```
 
 #### Sin Git:
@@ -117,7 +117,7 @@ Si tienes problemas:
 1. Verifica que todos los pasos se siguieron correctamente
 2. Revisa que los valores en `.env` sean correctos
 3. Asegúrate de que el bot tenga los permisos necesarios
-4. Contacta a justjorge en Discord para soporte adicional
+4. Contacta a SGT. Mokka en Discord para soporte adicional
 
 ## Notas Importantes
 
